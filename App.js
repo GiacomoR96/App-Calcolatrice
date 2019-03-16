@@ -1,325 +1,322 @@
-import React from "react";
-import { StyleSheet, Text, View,Image, StatusBar } from "react-native";
-import BtnCalcolatrice from "./components/BtnCalcolatrice";
-
-StatusBar.setHidden(false);
-/*
-const Button = props => (
-  <View style={[styles.buttonProperty,styles.flex_center_double]}>
-    <Text style={styles.text}>{props.symbol}</Text>
-  </View>
-);
-
-const ListOfSymbol1 = [
-  {symbol:"C"},
-  {symbol:"√a"},
-  {symbol:"%"},
-  {symbol:"÷"}
-];
-
-const ListOfSymbol2= [
-  {symbol:"7"},
-  {symbol:"8"},
-  {symbol:"9"},
-  {symbol:"×"}
-];
-
-const ListOfSymbol3 = [
-  {symbol:"4"},
-  {symbol:"5"},
-  {symbol:"6"},
-  {symbol:"-"}
-];
-
-const ListOfSymbol4 = [
-  {symbol:"1"},
-  {symbol:"2"},
-  {symbol:"3"},
-  {symbol:"+"}
-];
-
-const ListOfSymbol5 = [
-  {symbol:"0"},
-  {symbol:""},
-  {symbol:"."},
-  {symbol:"="},
-
-];
-
-
-
-export default App extends React.Component{
-  
-  estraiListOfSymbol1 = () =>(
-    ListOfSymbol1.map( (obj,index) => <Button symbol={obj.symbol} key={index}></Button>)
-  );
-
-  estraiListOfSymbol2 = () =>(
-    ListOfSymbol2.map( (obj,index) => <Button symbol={obj.symbol} key={index}></Button>)
-  );
-
-  estraiListOfSymbol3 = () =>(
-    ListOfSymbol3.map( (obj,index) => <Button symbol={obj.symbol} key={index}></Button>)
-  );
-
-  estraiListOfSymbol4 = () =>(
-    ListOfSymbol4.map( (obj,index) => <Button symbol={obj.symbol} key={index}></Button>)
-  );
-
-  estraiListOfSymbol5 = () =>(
-    ListOfSymbol5.map( (obj,index) => <Button symbol={obj.symbol} key={index}></Button>)
-  );
-
-    return (
-      <View style={styles.container}>
-
-        
-
-        <View style={[styles.flex_row]}>
-          {this.estraiListOfSymbol1()}
-        </View>
-        
-        <View style={[styles.flex_row]}>
-          {this.estraiListOfSymbol2()}
-        </View>
-
-        <View style={styles.flex_row}>
-          {this.estraiListOfSymbol3()}
-        </View>
-
-        <View style={styles.flex_row}>
-          {this.estraiListOfSymbol4()}
-        </View>
-        
-        <View style={styles.flex_row}>
-          {this.estraiListOfSymbol5()}
-        </View>
-
-      </View>
-    );
-}
-
-*/
+import * as React from 'react';
+import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
+import { Constants } from 'expo';
+import CalcButton from "./components/CalcButton"
 
 export default class App extends React.Component {
+  constructor(props){
+    super(props);
 
-  state = {
-    valore: "",
-    risultato: 0,
-    operazione: ""
-  }    
-
-  buttonNumberClick = props => {
- // {console.log("Valore props: "+props)}
-    this.setState({
-      valore: this.state.valore+props
-    })
-  //  {console.log(this.state.valore)}
-  }; 
-
-  buttonReset = () =>{
-    this.setState({
-      valore:"",
-      risultato:0,
-      operazione:""
-    })
-  //  console.log("valoreState:"+this.state.valore);
-  };
-
-  buttonCancel = () =>{
-    {
-    //  console.log(this.state.valore);
-      let x = this.state.valore;
-      x = x.substring(0,x.length-1);
-    //  console.log("x:"+x);
-      this.setState({
-        valore: x
-      })     
+    this.state={
+      operando: false,
+      operazione: "0"
+      
     }
   }
 
-  buttonSum = () => {
-    {
-      this.setState({
-        risultato : this.state.operazione == "=" ? this.state.risultato : this.state.risultato + parseInt(this.state.valore),
+  concatOperation(props){
+    const { operazione, operando } = this.state;
 
-        valore:"",
-        operazione:"+"
-      })
-    //  console.log("risultato: "+this.state.risultato)
+      if(operazione === "0"){
+        if(props === "0") {this.setState({operazione:props})}
+        else if(props >= "0" && props<="9") {this.setState({operazione:props})} 
+        else {this.setState({operazione:operazione.concat(props)})} 
+      }
+      else{
+        switch(props){
+          case ".": {
+            if(operando === true) {this.setState({operazione:operazione.substr(0,operazione.length-1).concat(props)})}
+            else {
+              this.setState({operazione:operazione.concat(props),operando:true})
+            }
+            break;
+          }
+          case "/": {
+            if(operando === true) {this.setState({operazione:operazione.substr(0,operazione.length-1).concat(props)})}
+            else {
+              this.setState({operazione:operazione.concat(props),operando:true})
+            }
+            break;
+          }
+          case "*": {
+            if(operando === true) {this.setState({operazione:operazione.substr(0,operazione.length-1).concat(props)})}
+            else {
+              this.setState({operazione:operazione.concat(props),operando:true})
+            }
+            break;
+          }
+          case "-": {
+            if(operando === true) {this.setState({operazione:operazione.substr(0,operazione.length-1).concat(props)})}
+            else {
+              this.setState({operazione:operazione.concat(props),operando:true})
+            }
+            break;
+          }
+          case "+": {
+            if(operando === true) {this.setState({operazione:operazione.substr(0,operazione.length-1).concat(props)})}
+            else {
+              this.setState({operazione:operazione.concat(props),operando:true})
+            }
+            break;
+          }
+          default: {
+            this.setState({operazione:operazione.concat(props),operando:false})
+          }
+        }
+      }
+      
+      /* operazione : operazione === "0" ? (props === "0" ? props : (props >= "0" && props<="9" ? props : operazione.concat(props))) : 
+                ( props === "." ? (operazione.substr(operazione.length-1,operazione.length)===(".") ? operazione : operazione.concat(props) ) : 
+                  props === "/" ? (operazione.substr(operazione.length-1,operazione.length)===("/") ? operazione : operazione.concat(props) ) :
+                  props === "*" ? (operazione.substr(operazione.length-1,operazione.length)===("*") ? operazione : operazione.concat(props) ) :
+                  props === "-" ? (operazione.substr(operazione.length-1,operazione.length)===("-") ? operazione : operazione.concat(props) ) :
+                  props === "+" ? (operazione.substr(operazione.length-1,operazione.length)===("+") ? operazione : operazione.concat(props) ) :
+                  operazione.concat(props) ) */
+                /* (props === ("." || "/" || "*" || "-" || "+") ? (operazione.substr(operazione.length-1,operazione.length)===("." || "/" || "*" || "-" || "+") ? "operazione" : operazione.concat(props)) : operazione.concat(props) ) */
+      /* operazione : operazione === "0" ? (props >= "0" && props<="9" ? props : operazione.concat(props)) : operazione.concat(props) */
+    
+  }
+
+  deleteOperation(){
+    const { operazione } = this.state;
+    this.setState({
+      operazione : "0"
+    })
+  }
+
+  delLastOperation(){
+    const { operando, operazione } = this.state;
+    var tmp = operazione.substr(operazione.length-1,operazione.length);
+    if(parseInt(tmp)>=0 && parseInt(tmp)<=9)  {
+      tmp = operazione.substr(operazione.length-2,operazione.length-2)
     }
-  };
-  
-  buttonSubtraction = () => {
-    {
-      this.setState({
-        risultato : this.state.operazione == "="? this.state.risultato : 
-          this.state.risultato == 0 ? this.state.valore :
-        this.state.risultato - parseInt(this.state.valore),
-
-        valore:"",
-        operazione:"-"
-      })
+    switch(tmp){
+      case ".":{
+        this.setState({operando:true});
+        break;
+      }
+      case "/":{
+        this.setState({operando:true});
+        break;
+      }
+      case "*":{
+        this.setState({operando:true});
+        break;
+      }
+      case "-":{
+        this.setState({operando:true});
+        break;
+      }
+      case "+":{
+        this.setState({operando:true});
+        break;
+      }
     }
-  };
+    
+    this.setState({
+      operazione: operazione.length==1 ? (operazione!="0" ? "0" : "0") : operazione.substr(0,operazione.length-1)
+    })
+  }
 
-  buttonMultply = () => {
-    {
-      this.setState({
-        risultato : this.state.operazione == "=" ? this.state.risultato :
-          this.state.risultato == 0 ? this.state.valore :
-        this.state.risultato * parseInt(this.state.valore),
-
-        valore:"",
-        operazione:"*"
-      })
+  findPrevOperation(partialRis){
+    var tmp;
+    var i=partialRis.length-1;
+    for(;i>=0;i--){
+      tmp = partialRis.charAt(i-1);
+      if(tmp=="/") break;
+      else if(tmp=="*") break;
+      else if(tmp=="-") break;
+      else if(tmp=="+") break;
     }
-  };
 
-  buttonDivision = () => {
-    {
-      this.setState({
-        risultato : this.state.operazione == "=" ? this.state.risultato :
-          this.state.risultato == 0 ? this.state.valore :
-          this.state.risultato / parseInt(this.state.valore),
+    if(i===(-1)) {i=0;}
+    return i;
+  }
 
-        valore:"",
-        operazione:"/"
-      })
+  findNextOperation(partialRis){
+    var tmp;
+    var i=0;
+    for(;(i<partialRis.length );i++){
+      tmp = partialRis.charAt(i);
+      if(tmp=="/") break;
+      else if(tmp=="*") break;
+      else if(tmp=="-") break;
+      else if(tmp=="+") break;
     }
-  };
 
-  buttonResult = () =>{
-    { 
-      const risSum = this.state.risultato + parseInt(this.state.valore);
-      this.state.operazione == "+" ? this.setState({
-        risultato : risSum, 
-        valore: risSum,
-        operazione:"="
-      })
-      : {};
-      risSub = this.state.risultato - parseInt(this.state.valore);
-      this.state.operazione == "-" ? this.setState({
-        risultato : risSub, 
-        valore: risSub,
-        operazione:"="
-      })
-      : {};
-      risMul = this.state.risultato * parseInt(this.state.valore);
-      this.state.operazione == "*" ? this.setState({
-        risultato : risMul, 
-        valore: risMul,
-        operazione:"="
-      })
-      : {};
-      risDiv = this.state.risultato / parseInt(this.state.valore);
-      this.state.operazione == "/" ? this.setState({
-        risultato : risDiv, 
-        valore: risDiv,
-        operazione:"="
-      })
-      : {};
+    if(i===(-1)) {i=partialRis.length;}
+    return i;
+  }
 
+  setRis(ris){
+    const { operazione } = this.state;
+    this.setState({
+      operazione : ris
+    })
+  }
 
+  resultCalculation(){
+    const { operazione } = this.state;
 
+    var cond=-1;
+    var indexSx,indexDx;
+    var x, y, ris,tmp,finalRis;
+    var fine = false;
+    var ciclo=0;
 
-      /* this.setState({
+    for(var i=0;i<operazione.length;i++){
+      if(operazione.charAt(i)=="/") ciclo++;
+      if(operazione.charAt(i)=="*") ciclo++;
+      if(operazione.charAt(i)=="-") ciclo++;
+      if(operazione.charAt(i)=="+") ciclo++;
+    }
+    finalRis = operazione;
+    for(var j=0; !fine && j<ciclo;j++){
+      cond = finalRis.indexOf("/");
+      if(cond!=(-1)){
+        console.log("/ ->COND: ",cond)
+        indexSx = this.findPrevOperation(finalRis.substr(0,cond+1));
+        indexDx = this.findNextOperation(finalRis.substr(cond+1,finalRis.length));
         
-      }) */
+        x=parseFloat(finalRis.substr(indexSx,cond-indexSx));
+        y=parseFloat(finalRis.substr(cond+1,indexDx));
+        if(y==0){
+          fine = true;
+          finalRis = "0" //∞  - Questo valore equivale all'infinito (per comodità si è scelto di utilizzare lo 0 per facilitare i calcoli)
+        }
+        else{
+          tmp = x/y;
+        /*
+        console.log("PRIMO PARTE ",finalRis.substr(0,indexSx));
+        console.log("Parte Calcolata ",String(tmp));
+        console.log("SECONDO PARTE ",finalRis.substr((cond+1+indexDx),finalRis.length));
+        */
+        
+          ris = finalRis.substr(0,indexSx) + String(tmp) + finalRis.substr(cond+1+indexDx,finalRis.length);
+        }
+      }
+      if(cond==(-1)){
+        cond = finalRis.indexOf("*");
+        if(cond!=(-1)){
+          console.log("* ->COND: ",cond)
+          indexSx = this.findPrevOperation(finalRis.substr(0,cond+1));
+          indexDx = this.findNextOperation(finalRis.substr(cond+1,finalRis.length));
+          x=parseFloat(finalRis.substr(indexSx,cond-indexSx));
+          y=parseFloat(finalRis.substr(cond+1,indexDx));
+          
+          tmp = x*y;
+          
+          ris = finalRis.substr(0,indexSx) + String(tmp) + finalRis.substr(cond+1+indexDx,finalRis.length);
+        }
+      }
+      if(cond==(-1)){
+        cond = finalRis.indexOf("-");
+        if(cond!=(-1)){
+          console.log("- ->COND: ",cond)
+          indexSx = this.findPrevOperation(finalRis.substr(0,cond+1));
+          indexDx = this.findNextOperation(finalRis.substr(cond+1,finalRis.length));
+          x=parseFloat(finalRis.substr(indexSx,cond-indexSx));
+          y=parseFloat(finalRis.substr(cond+1,indexDx));
+          tmp = x-y;
+          ris = finalRis.substr(0,indexSx) + String(tmp) + finalRis.substr(cond+1+indexDx,finalRis.length);
+        }
+      }
+      if(cond==(-1)){
+        cond = finalRis.indexOf("+");
+        if(cond!=(-1)){
+          console.log("+ ->COND: ",cond)
+          indexSx = this.findPrevOperation(finalRis.substr(0,cond+1));
+          indexDx = this.findNextOperation(finalRis.substr(cond+1,finalRis.length));
+          x=parseFloat(finalRis.substr(indexSx,cond-indexSx));
+          y=parseFloat(finalRis.substr(cond+1,indexDx));
+          
+          tmp = x+y;
+          
+          ris = finalRis.substr(0,indexSx) + String(tmp) + finalRis.substr(cond+1+indexDx,finalRis.length);
+        }
+      }
+
+      finalRis = ris;
+      
     }
+  
+    if(fine==false){
+      this.setState({
+        operazione : finalRis
+      })
+    }
+    
+    
   }
 
   render() {
     return (
       <View style={styles.container}>
+
+        <View style={styles.display}>
+          <Text style={styles.displayText}>{this.state.operazione}</Text>
+        </View>
+
+        <View style={styles.containerButton}>
+          <CalcButton value="C" onPress={() => this.deleteOperation()} />
+          <CalcButton value="+/-" onPress={() => alert("Funzione ancora da implemetare!")} />
+          <CalcButton value="%" onPress={() => alert("Funzione ancora da implemetare!")} />
+          <CalcButton value="DEL" onPress={() => this.delLastOperation()} />
+        </View>
+
+
+        <View style={styles.containerButton}>
+          <CalcButton value="7" onPress={() => this.concatOperation("7")} />
+          <CalcButton value="8" onPress={() => this.concatOperation("8")} />
+          <CalcButton value="9" onPress={() => this.concatOperation("9")} />
+          <CalcButton value="/" onPress={() => this.concatOperation("/")} />
+        </View>
+
+        <View style={styles.containerButton}>
+          <CalcButton value="4" onPress={() => this.concatOperation("4")} />
+          <CalcButton value="5" onPress={() => this.concatOperation("5")} />
+          <CalcButton value="6" onPress={() => this.concatOperation("6")} />
+          <CalcButton value="*" onPress={() => this.concatOperation("*")} />
+        </View>
+
+        <View style={styles.containerButton}>
+          <CalcButton value="1" onPress={() => this.concatOperation("1")} />
+          <CalcButton value="2" onPress={() => this.concatOperation("2")}/>
+          <CalcButton value="3" onPress={() => this.concatOperation("3")} />
+          <CalcButton value="-" onPress={() => this.concatOperation("-")} />
+        </View>
         
-        {/* <View>
-        <Text style={{alignItems:"center",justifyContent:"center",}}>{this.state.valore}</Text>
-        <Text style={{alignItems:"center",justifyContent:"center"}}>{this.state.risultato}</Text>
-        </View> */}
-        <View style={styles.box}>
-          <Text style={[styles.textOfBox]}>{this.state.valore}</Text>
+        <View style={styles.containerButton}>
+          <CalcButton value="0" onPress={() => this.concatOperation("0")} />
+          <CalcButton value="." onPress={() => this.concatOperation(",")} />
+          <CalcButton value="=" onPress={() => this.resultCalculation()} />
+          <CalcButton value="+" onPress={() => this.concatOperation("+")} />
         </View>
-
-        <View style={styles.flex_row}>
-          <BtnCalcolatrice value="C" onPress={() => this.buttonReset()}></BtnCalcolatrice>
-          <BtnCalcolatrice value="+/-" onPress={() => {alert("Funzione ancora da implementare")}}></BtnCalcolatrice>
-          <BtnCalcolatrice value="%" onPress={() => {alert("Funzione ancora da implementare")}}></BtnCalcolatrice>  
-          <BtnCalcolatrice value="DEL" onPress={() => this.buttonCancel()}></BtnCalcolatrice>
-        </View>
-
-        <View style={styles.flex_row}>
-          <BtnCalcolatrice value="7" onPress={() => this.buttonNumberClick("7")}></BtnCalcolatrice>
-          <BtnCalcolatrice value="8" onPress={() => this.buttonNumberClick("8")}></BtnCalcolatrice>
-          <BtnCalcolatrice value="9" onPress={() => this.buttonNumberClick("9")}></BtnCalcolatrice>  
-          <BtnCalcolatrice value="/" onPress={() => this.buttonDivision()}></BtnCalcolatrice>
-        </View>
-
-        <View style={styles.flex_row}>
-          <BtnCalcolatrice value="4" onPress={() => this.buttonNumberClick("4")}></BtnCalcolatrice>
-          <BtnCalcolatrice value="5" onPress={() => this.buttonNumberClick("5")}></BtnCalcolatrice>
-          <BtnCalcolatrice value="6" onPress={() => this.buttonNumberClick("6")}></BtnCalcolatrice>  
-          <BtnCalcolatrice value="*" onPress={() => this.buttonMultply()}></BtnCalcolatrice>
-        </View>
-
-        <View style={styles.flex_row}>
-          <BtnCalcolatrice value="1" onPress={() => this.buttonNumberClick("1")}></BtnCalcolatrice>
-          <BtnCalcolatrice value="2" onPress={() => this.buttonNumberClick("2")}></BtnCalcolatrice>
-          <BtnCalcolatrice value="3" onPress={() => this.buttonNumberClick("3")}></BtnCalcolatrice>  
-          <BtnCalcolatrice value="-" onPress={() => this.buttonSubtraction()}></BtnCalcolatrice>
-        </View>
-
-        <View style={styles.flex_row}>
-          <BtnCalcolatrice value="0" onPress={() => this.buttonNumberClick("0")}></BtnCalcolatrice>
-          <BtnCalcolatrice value="." onPress={() => {alert("Funzione ancora da implementare")}}></BtnCalcolatrice>
-          <BtnCalcolatrice value="=" onPress={() => this.buttonResult()}></BtnCalcolatrice>  
-          <BtnCalcolatrice value="+" onPress={() => this.buttonSum() }></BtnCalcolatrice>
-        </View>
-
-        
-
+         
       </View>
     );
   }
 }
 
-/** ADDIZIONE
- * {/* this.state.valore=="0" ? this.setState({ parseInt(this.) })
- *}
- */
-
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
-    backgroundColor: 'yellow',
-  //  alignItems: 'center',
-  //  justifyContent: 'center',
+    paddingTop: Constants.statusBarHeight,
+    backgroundColor: 'white',
   },
-  flex_row:{
-    flexDirection:'row'
+  display: {
+    backgroundColor: 'darkcyan',
+    flex: 1,
+    alignItems:"center",
+    justifyContent:"center"
   },
-  flex_center:{
-    alignItems:'center',
+  displayText: {
+    color: 'white',
+    fontSize:48,
   },
-  flex_center_double:{
-    alignItems:'center',
-    justifyContent:'center'
+  containerButton:{
+    flexDirection:"row",
   },
-  flex_stretch:{
-    alignItems:'stretch',
-  },
-  text:{
-    fontSize:25
-  },
-  box:{
-    height:405, //285
-    width:null,
-    backgroundColor:"lightgray",
-    justifyContent:"flex-end",
-    alignItems:"flex-end"
-  },
-  textOfBox:{
-    fontSize:70,
-    color:"white"
-  }
+  
 });

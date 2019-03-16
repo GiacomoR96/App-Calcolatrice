@@ -1,33 +1,30 @@
-import React from "react";
-import { View, Text, TouchableHighlight, StyleSheet } from "react-native";
-import PropTypes from "prop-types";
+import * as React from "react";
+import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
 
 const CalcButton = props => (
-  <TouchableHighlight onPress={props.onPress}>
-    <View style={styles.wrapper}>
-      <Text style={{ color: "blue", fontSize: 32 }}>{props.value}</Text>
-    </View>
-  </TouchableHighlight>
+  <View style={styles.buttonContainer}>
+    <TouchableHighlight style={styles.buttonContainerBox} onPress={props.onPress}>
+      <Text style={styles.buttonContainerBoxText}>{props.value}</Text>
+    </TouchableHighlight>
+  </View>
 );
-
-CalcButton.propTypes = {
-  value: PropTypes.string.isRequired,
-  onPress: PropTypes.func.isRequired
-};
-
-CalcButton.defaultProps = {
-  value: "0"
-};
 
 export default CalcButton;
 
 const styles = StyleSheet.create({
-  wrapper: {
-    height: 80,
-    width: 80,
-    backgroundColor: "orange",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 5
+  buttonContainer: {
+    flex:1,
+    height: 110,
+    borderWidth: 0.5,
+    borderColor: 'lightgrey',
+    backgroundColor: 'white'
+  },
+  buttonContainerBox:{
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
+  },
+  buttonContainerBoxText:{
+    fontSize:40
   }
 });
